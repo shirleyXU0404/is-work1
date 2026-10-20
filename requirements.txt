@@ -42,7 +42,7 @@ ruamel.yaml==0.19.1
 safety==3.8.1
 safety-schemas==0.0.16
 shellingham==1.5.4
-SQLAlchemy==2.1.5
+SQLAlchemy==2.0.30
 stevedore==5.9.1
 tenacity==9.2.1
 tomlkit==0.15.2
