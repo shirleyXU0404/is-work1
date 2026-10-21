@@ -28,7 +28,7 @@ jobs:
       - name: Safety scan
         env:
           SAFETY_API_KEY: ${{ secrets.SAFETY_API_KEY }}
-        run: safety scan --ignore SFTY-20260902-58666 --file requirements.txt
+        run: safety scan --ignore-vulnerability SFTY-20260902-58666 --file requirements.txt
 
       - name: SAST Static Code Scan (bandit)
         env:
