@@ -1,5 +1,4 @@
 name: Security CI Pipeline
-
 on:
   push:
     branches: [ main ]
@@ -25,10 +24,10 @@ jobs:
           pip install -r requirements.txt
           pip install bandit safety
 
-      - name: Safety scan
-        env:
-          SAFETY_API_KEY: ${{ secrets.SAFETY_API_KEY }}
-        run: safety scan --ignore-vulnerability SFTY-20260902-58666 --no-platform-policy --file requirements.txt
+      - name: Run official Safety Action
+        uses: pyupio/safety-action@v1
+        with:
+          api-key: ${{ secrets.SAFETY_API_KEY }}
 
       - name: SAST Static Code Scan (bandit)
         env:
@@ -36,14 +35,7 @@ jobs:
         run: |
           bandit -r . -x ./vulhub -f json -o bandit-report.json
 
-
-      - name: SAST Static Code Scan (bandit)
-        run: |
-          bandit -r . -x ./vulhub -f json -o bandit-report.json
-
-
-
-      - name: SCA Dependency Vulnerability Scan (safety)
+      - name: SCA Dependency Vulnerability Scan
         run: safety check --full-report > safety-report.txt
 
       - name: Upload scan reports
@@ -53,3 +45,4 @@ jobs:
           path: |
             bandit-report.json
             safety-report.txt
+
