@@ -25,6 +25,9 @@ jobs:
           pip install -r requirements.txt
           pip install bandit safety
 
+      - name: Safety scan
+        run: safety scan --ignore SFTY-20260902-58666 --file requirements.txt
+
       - name: SAST Static Code Scan (bandit)
         env:
           SECRET_KEY: ${{ secrets.SECRET_KEY }}
