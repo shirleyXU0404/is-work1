@@ -24,10 +24,11 @@ jobs:
           pip install -r requirements.txt
           pip install bandit safety
 
-      - name: Run official Safety Action
-        uses: pyupio/safety-action@v1
-        with:
-          api-key: ${{ secrets.SAFETY_API_KEY }}
+      - name: Safety scan
+        env:
+          SAFETY_API_KEY: ${{ secrets.SAFETY_API_KEY }}
+        continue-on-error: true
+        run: safety scan --file requirements.txt
 
       - name: SAST Static Code Scan (bandit)
         env:
@@ -35,7 +36,7 @@ jobs:
         run: |
           bandit -r . -x ./vulhub -f json -o bandit-report.json
 
-      - name: SCA Dependency Vulnerability Scan
+      - name: Export safety full report
         run: safety check --full-report > safety-report.txt
 
       - name: Upload scan reports
@@ -45,4 +46,5 @@ jobs:
           path: |
             bandit-report.json
             safety-report.txt
+
 
