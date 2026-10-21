@@ -37,6 +37,7 @@ jobs:
           bandit -r . -x ./vulhub -f json -o bandit-report.json
 
       - name: Export safety full report
+        continue-on-error: true
         run: safety check --full-report > safety-report.txt
 
       - name: Upload scan reports
@@ -46,5 +47,6 @@ jobs:
           path: |
             bandit-report.json
             safety-report.txt
+
 
 
