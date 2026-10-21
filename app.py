@@ -112,5 +112,15 @@ def get_user_list(current_user):
         "user_list": [u.to_dict() for u in users]
     })
 
+@app.route('/api/profile', methods=['GET'])
+@token_required
+def get_profile(current_user):
+    return jsonify({
+        "msg": "success",
+        "profile": current_user.to_dict()
+    })
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=False)
+
+
