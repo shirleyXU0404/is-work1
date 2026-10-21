@@ -26,7 +26,10 @@ jobs:
           pip install bandit safety
 
       - name: SAST Static Code Scan (bandit)
-        run: bandit -r . -f json -o bandit-report.json
+        run: |
+          bandit -r . -x ./venv,./vulhub -f json -o bandit-report.json
+
+
 
       - name: SCA Dependency Vulnerability Scan (safety)
         run: safety check --full-report > safety-report.txt
