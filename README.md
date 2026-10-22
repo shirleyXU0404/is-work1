@@ -152,4 +152,4 @@ Result: The server returns `HTTP ERROR 404 Not Found.` The attack payload cannot
 ## CI/CD Pipeline
 CI workflow file path: `.github/workflows/ci.yml`
 Pipeline triggers on every `push` and pull request. It runs bandit (SAST) and safety (SCA) automatically.
-Link to the latest successful pipeline run: 
+Link to the latest successful pipeline run: `https://github.com/shirleyXU0404/is-work1/actions/runs/39574520997`
