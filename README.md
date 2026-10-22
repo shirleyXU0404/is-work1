@@ -108,4 +108,48 @@ curl http://127.0.0.1:8081/%u002e/WEB-INF/web.xml
 
 > 
 > Screenshot of successful exploitation:
+<p align="center">
+  <img src="assets/fix.png" width="850">
+</p>
 
+## Root Cause Analysis
+
+The root cause is a flawed URI parsing implementation in Jetty 9.4.40.
+Jetty’s parser supports the non-standard `%uXXXX` Unicode escape format. When the server parses the URI path, it decodes `%u002e` into a literal dot `.` before applying path restriction checks. This decoding happens before the protection logic that blocks access to the `WEB-INF` folder. Attackers can bypass access restrictions and traverse to read protected files.
+
+## Applied Fix
+
+## What was changed
+
+The `docker-compose.yml` configuration file was updated. The Jetty image tag was changed from `jetty:9.4.40-jre11` (vulnerable) to `jetty:9.4.43-jre11` (patched version).
+
+Old environment was shut down and rebuilt:
+
+```
+docker-compose down
+docker-compose up -d --force-recreate
+```
+
+### Why this fix works
+
+Jetty 9.4.43 added validation logic for `%u`-style Unicode escape sequences in URI paths. The server no longer treats `%u002e` as a valid path dot. The path traversal trick is blocked at the parsing stage, and requests targeting `WEB-INF` are rejected.
+Regression test: The normal web page service remains available after the upgrade.
+
+## Proof of Vulnerability Elimination
+Run the identical exploit payload against the fixed Jetty 9.4.43 environment:
+
+```
+curl http://127.0.0.1:8081/%u002e/WEB-INF/web.xml
+```
+Result: The server returns `HTTP ERROR 404 Not Found.` The attack payload cannot retrieve `web.xml`. The vulnerability is eliminated.
+
+>
+>Screenshot of remediation verification:
+<p align="center">
+  <img src="assets/attack.png" width="850">
+</p>
+
+## CI/CD Pipeline
+CI workflow file path: `.github/workflows/ci.yml`
+Pipeline triggers on every `push` and pull request. It runs bandit (SAST) and safety (SCA) automatically.
+Link to the latest successful pipeline run: 
