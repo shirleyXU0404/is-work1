@@ -57,3 +57,14 @@ Static security scanning and dependency scanning are integrated into GitHub Acti
 
 > 
 > Screenshots of the SAST and SCA reports are attached below:
+### SAST Scan (Bandit)
+Zero vulnerabilities detected in source code.
+<p align="center">
+  <img src="assets/SAST.png" width="850">
+</p>
+
+### SCA Scan (Safety)
+2 vulnerabilities found in dependencies. Neither can be exploited in this project.
+<p align="center">
+  <img src="assets/SCA.png" width="850">
+</p>
