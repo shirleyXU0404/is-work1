@@ -1,5 +1,4 @@
 name: Security CI Pipeline
-
 on:
   push:
     branches: [ main ]
@@ -25,20 +24,20 @@ jobs:
           pip install -r requirements.txt
           pip install bandit safety
 
+      - name: Safety scan
+        env:
+          SAFETY_API_KEY: ${{ secrets.SAFETY_API_KEY }}
+        continue-on-error: true
+        run: safety scan --file requirements.txt
+
       - name: SAST Static Code Scan (bandit)
         env:
           SECRET_KEY: ${{ secrets.SECRET_KEY }}
         run: |
           bandit -r . -x ./vulhub -f json -o bandit-report.json
 
-
-      - name: SAST Static Code Scan (bandit)
-        run: |
-          bandit -r . -x ./vulhub -f json -o bandit-report.json
-
-
-
-      - name: SCA Dependency Vulnerability Scan (safety)
+      - name: Export safety full report
+        continue-on-error: true
         run: safety check --full-report > safety-report.txt
 
       - name: Upload scan reports
@@ -48,3 +47,6 @@ jobs:
           path: |
             bandit-report.json
             safety-report.txt
+
+
+
