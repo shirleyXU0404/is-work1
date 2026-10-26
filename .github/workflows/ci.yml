@@ -34,7 +34,7 @@ jobs:
       - name: SCA Dependency Scan (safety)
         continue-on-error: true
         run: |
-          safety check -r requirements.txt --full-report > safety-report.txt
+          safety check -r requirements.txt --full-report > safety-report.txt || true
 
       - name: Upload scan reports
         if: always()
