@@ -32,7 +32,6 @@ nltk==3.10.3
 packaging==26.3
 pycparser==3.1
 pydantic==2.14.1
-pydantic_core==2.50.0
 Pygments==2.21.0
 PyJWT==2.15.1
 PyYAML==6.0.3
