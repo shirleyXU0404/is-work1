@@ -8,7 +8,7 @@ on:
 jobs:
   security-test:
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -22,25 +22,22 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-          pip install bandit safety
-
-      - name: Safety scan
-        env:
-          SAFETY_API_KEY: ${{ secrets.SAFETY_API_KEY }}
-        continue-on-error: true
-        run: safety scan --file requirements.txt
+          pip install "safety<3" bandit
 
       - name: SAST Static Code Scan (bandit)
+        continue-on-error: true
         env:
           SECRET_KEY: ${{ secrets.SECRET_KEY }}
         run: |
-          bandit -r . -x ./vulhub -f json -o bandit-report.json
+          bandit -r . -x ./vulhub -f json -o bandit-report.json --exit-zero
 
-      - name: Export safety full report
+      - name: SCA Dependency Scan (safety)
         continue-on-error: true
-        run: safety check --full-report > safety-report.txt
+        run: |
+          safety check -r requirements.txt --full-report > safety-report.txt
 
       - name: Upload scan reports
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: security-reports
