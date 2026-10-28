@@ -64,19 +64,10 @@ Zero vulnerabilities detected in source code.
 </p>
 
 ### SCA Scan (Safety)
-2 vulnerabilities found in dependencies. Neither can be exploited in this project.
+Zero vulnerabilities found in dependencies. Neither can be exploited in this project.
 <p align="center">
   <img src="assets/SCA.png" width="850">
 </p>
-
-#### Risk Analysis for Detected SCA Vulnerabilities
-1. **setuptools (CVE-2026-59890)**
-This information disclosure vulnerability only works on macOS APFS/HFS+ filesystem during source distribution (sdist) packaging. It relies on special Unicode filename normalization conflicts.
-Our application runs on Ubuntu CI environment and does not build or publish source packages to PyPI. All exploitation prerequisites are not satisfied. This vulnerability poses no threat.
-
-2. **nltk (CVE-2026-81726)**
-This is a path traversal vulnerability. Attackers can exploit it only if untrusted user input is directly passed as file paths into NLTK’s model save/load APIs.
-In our Flask API, we do not accept any user-controlled file path parameters. All file paths used by NLTK are hard-coded on the server side. There is no available attack vector.
 
 ## Selected Vulnerability: CVE-2021-34429
 
